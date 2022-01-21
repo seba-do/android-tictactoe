@@ -1,13 +1,14 @@
 package de.sdomma.tictactoe
 
 class Game {
-    private val board: Array<Array<Player?>> = arrayOf(
+    val board: Array<Array<Player?>> = arrayOf(
         arrayOf(null, null, null),
         arrayOf(null, null, null),
         arrayOf(null, null, null)
     )
 
-    private var currentPlayer: Player = Player.ONE
+    var currentPlayer: Player = Player.ONE
+        private set
 
     var gameStatus: GameStatus = GameStatus.RUNNING
         private set
@@ -39,6 +40,10 @@ class Game {
         if (resultDraw) {
             gameStatus = GameStatus.DRAW
         }
+    }
+
+    fun switchPlayer() {
+        currentPlayer = if(currentPlayer == Player.ONE) Player.TWO else Player.ONE
     }
 }
 
