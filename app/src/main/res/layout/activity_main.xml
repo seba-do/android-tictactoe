@@ -4,19 +4,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="15dp"
+    android:paddingVertical="20dp"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btn_reset"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/stats"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reset Game"
-        android:textSize="40sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text="One" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text="Draw"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text="Two" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/counter_one"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/counter_draw"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text="0"/>
+
+            <TextView
+                android:id="@+id/counter_two"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text="0" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/game_board"
@@ -26,9 +97,11 @@
         android:divider="@drawable/divider"
         android:orientation="vertical"
         android:showDividers="middle"
+        android:background="@drawable/bg_board"
+
+        app:layout_constraintTop_toBottomOf="@id/stats"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/current_player_tv">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -104,37 +177,39 @@
         android:id="@+id/current_player_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:textColor="@color/the_most_beautiful_pink"
-        android:textSize="50sp"
-        android:textStyle="italic"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headline"
-        tools:text="TEST" />
+        app:layout_constraintTop_toBottomOf="@id/game_board"
+        app:layout_constraintBottom_toTopOf="@id/winning_message_tv"
+        tools:text="Your turn player One" />
 
     <TextView
         android:id="@+id/winning_message_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Winner"
-        android:textColor="@color/also_a_beautiful_pink"
-        android:textSize="60sp"
-        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/btn_reset"
-        app:layout_constraintTop_toBottomOf="@id/game_board"
+        app:layout_constraintTop_toBottomOf="@id/current_player_tv"
+        tools:text="You won Player One"
         tools:visibility="visible" />
 
-    <TextView
-        android:id="@+id/headline"
+    <Button
+        android:id="@+id/btn_reset"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tic Tac Toe"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:layout_height="60dp"
+        android:text="Reset Game"
+        android:textSize="18sp"
+        android:background="@drawable/shape_btn"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/winning_message_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
