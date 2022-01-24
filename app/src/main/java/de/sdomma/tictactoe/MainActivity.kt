@@ -3,9 +3,11 @@ package de.sdomma.tictactoe
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var currentPlayerTV: TextView
     private lateinit var winningMessageTV: TextView
+    private lateinit var btnReset: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         currentPlayerTV = findViewById(R.id.current_player_tv)
         winningMessageTV = findViewById(R.id.winning_message_tv)
+        btnReset = findViewById(R.id.btn_reset)
 
         val input0: ImageView = findViewById(R.id.input_0)
         val input1: ImageView = findViewById(R.id.input_1)
@@ -44,6 +48,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         currentPlayerTV.text = myGame.currentPlayer.toString()
+
+        btnReset.setOnClickListener {
+            resetGame()
+        }
 
         /*input0.setOnClickListener {
             dothething(winningMessageTV, currentPlayerTV, input0, 0, 0)
@@ -112,17 +120,54 @@ class MainActivity : AppCompatActivity() {
             myGame.checkBoard(myGame.board)
 
             if (myGame.gameStatus == GameStatus.WON) {
-                winningMessageTV.visibility = View.VISIBLE
+                winningMessageTV.apply {
+                    text = "Won"
+                    visibility = View.VISIBLE
+                }
+                // Solution 1
+//                btnReset.visibility = View.VISIBLE
             }
 
             if (myGame.gameStatus == GameStatus.DRAW) {
-                winningMessageTV.text = "Draw"
-                winningMessageTV.visibility = View.VISIBLE
+                winningMessageTV.apply {
+                    text = "Draw"
+                    visibility = View.VISIBLE
+                }
+//                btnReset.visibility = View.VISIBLE
             }
+
+            // Solution 2
+//            if (myGame.gameStatus == GameStatus.WON || myGame.gameStatus == GameStatus.DRAW) {
+//                btnReset.visibility = View.VISIBLE
+//            }
+
+            // Solution 3
+//            if (myGame.gameStatus != GameStatus.RUNNING) {
+//                btnReset.visibility = View.VISIBLE
+//            }
+
+            // Solution 4 - 5
+            btnReset.visibility = if (myGame.gameStatus != GameStatus.RUNNING) View.VISIBLE else View.INVISIBLE
+
+            // Solution 5 - 3
+//            btnReset.isVisible = myGame.gameStatus != GameStatus.RUNNING
 
             // Switch Player
             myGame.switchPlayer()
             currentPlayerTV.text = myGame.currentPlayer.toString()
         }
+    }
+
+    private fun resetGame() {
+        inputFields?.forEach {
+            it.setImageDrawable(null)
+        }
+
+        myGame = Game()
+
+        btnReset.visibility = View.INVISIBLE
+        winningMessageTV.visibility = View.INVISIBLE
+
+        currentPlayerTV.text = myGame.currentPlayer.toString()
     }
 }
