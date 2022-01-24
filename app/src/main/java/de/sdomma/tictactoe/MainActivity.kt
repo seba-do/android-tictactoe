@@ -18,9 +18,34 @@ class MainActivity : AppCompatActivity() {
     private lateinit var winningMessageTV: TextView
     private lateinit var btnReset: Button
 
+    private lateinit var counterOneTV: TextView
+    private var counterOne: Int = 0
+        set(value) {
+            field = value
+            counterOneTV.text = value.toString()
+        }
+
+    private lateinit var counterTwoTV: TextView
+    private var counterTwo: Int = 0
+        set(value) {
+            field = value
+            counterTwoTV.text = value.toString()
+        }
+
+    private lateinit var counterDrawTV: TextView
+    private var counterDraw: Int = 0
+        set(value) {
+            field = value
+            counterDrawTV.text = value.toString()
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        counterOneTV = findViewById(R.id.counter_one)
+        counterTwoTV = findViewById(R.id.counter_two)
+        counterDrawTV = findViewById(R.id.counter_draw)
 
         currentPlayerTV = findViewById(R.id.current_player_tv)
         winningMessageTV = findViewById(R.id.winning_message_tv)
@@ -47,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        currentPlayerTV.text = myGame.currentPlayer.toString()
+        currentPlayerTV.text = "Your turn Player ${myGame.currentPlayer}"
 
         btnReset.setOnClickListener {
             resetGame()
@@ -121,8 +146,14 @@ class MainActivity : AppCompatActivity() {
 
             if (myGame.gameStatus == GameStatus.WON) {
                 winningMessageTV.apply {
-                    text = "Won"
+                    text = "You Won Player ${myGame.currentPlayer}"
                     visibility = View.VISIBLE
+                }
+
+                if (myGame.currentPlayer == Player.ONE) {
+                    counterOne++
+                } else {
+                    counterTwo++
                 }
                 // Solution 1
 //                btnReset.visibility = View.VISIBLE
@@ -133,6 +164,8 @@ class MainActivity : AppCompatActivity() {
                     text = "Draw"
                     visibility = View.VISIBLE
                 }
+
+                counterDraw++
 //                btnReset.visibility = View.VISIBLE
             }
 
@@ -154,7 +187,7 @@ class MainActivity : AppCompatActivity() {
 
             // Switch Player
             myGame.switchPlayer()
-            currentPlayerTV.text = myGame.currentPlayer.toString()
+            currentPlayerTV.text = "Your turn Player ${myGame.currentPlayer}"
         }
     }
 
@@ -168,6 +201,6 @@ class MainActivity : AppCompatActivity() {
         btnReset.visibility = View.INVISIBLE
         winningMessageTV.visibility = View.INVISIBLE
 
-        currentPlayerTV.text = myGame.currentPlayer.toString()
+        currentPlayerTV.text = "Your turn Player ${myGame.currentPlayer}"
     }
 }
