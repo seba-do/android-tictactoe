@@ -12,11 +12,7 @@ class Game() {
         this.gameStatus = gameStatus
     }
 
-    var board: Array<Array<Player?>> = arrayOf(
-        arrayOf(null, null, null),
-        arrayOf(null, null, null),
-        arrayOf(null, null, null)
-    )
+    var board: Array<Array<Player?>> = getEmptyBoard()
         private set
 
     var currentPlayer: Player = Player.ONE
@@ -31,6 +27,12 @@ class Game() {
     fun makeMove(x: Int, y: Int) {
         board[x][y] = currentPlayer
     }
+
+    fun getEmptyBoard() : Array<Array<Player?>> = arrayOf(
+        arrayOf(null, null, null),
+        arrayOf(null, null, null),
+        arrayOf(null, null, null)
+    )
 
     fun checkBoard(board: Array<Array<Player?>>) : GameStatus {
         val resultWin = mutableListOf<List<Player?>>().apply {
