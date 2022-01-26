@@ -39,11 +39,6 @@ class MainActivity : AppCompatActivity() {
             binding.counterDraw.text = value.toString()
         }
 
-    private fun getIconForPlayer(player: Player): Int = when (player) {
-        Player.ONE -> R.drawable.ic_player_one
-        Player.TWO -> R.drawable.ic_player_two
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -120,6 +115,11 @@ class MainActivity : AppCompatActivity() {
 
         // Show message according to the gameStatus
         setMessage(gameStatus)
+    }
+
+    private fun getIconForPlayer(player: Player): Int = when (player) {
+        Player.ONE -> R.drawable.ic_player_one
+        Player.TWO -> R.drawable.ic_player_two
     }
 
     private fun updateCounters(gameStatus: GameStatus) {
