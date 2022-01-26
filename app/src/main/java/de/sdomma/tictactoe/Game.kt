@@ -6,6 +6,7 @@ class Game {
         arrayOf(null, null, null),
         arrayOf(null, null, null)
     )
+        private set
 
     var currentPlayer: Player = Player.ONE
         private set
@@ -20,7 +21,7 @@ class Game {
         board[x][y] = currentPlayer
     }
 
-    fun checkBoard(board: Array<Array<Player?>>) {
+    fun checkBoard(board: Array<Array<Player?>>) : GameStatus {
         val resultWin = mutableListOf<List<Player?>>().apply {
             for (i in board.indices) {
                 add(listOf(board[i][0], board[i][1], board[i][2]))
@@ -32,7 +33,7 @@ class Game {
 
         if (resultWin) {
             gameStatus = GameStatus.WON
-            return
+            return gameStatus
         }
 
         val resultDraw = board.flatten().all { it != null }
@@ -40,10 +41,13 @@ class Game {
         if (resultDraw) {
             gameStatus = GameStatus.DRAW
         }
+
+        return gameStatus
     }
 
-    fun switchPlayer() {
-        currentPlayer = if(currentPlayer == Player.ONE) Player.TWO else Player.ONE
+    fun switchPlayer(gameStatus: GameStatus) {
+        if (gameStatus == GameStatus.RUNNING)
+            currentPlayer = if(currentPlayer == Player.ONE) Player.TWO else Player.ONE
     }
 }
 

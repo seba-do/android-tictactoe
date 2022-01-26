@@ -1,106 +1,95 @@
 package de.sdomma.tictactoe
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.isVisible
+import androidx.appcompat.app.AppCompatActivity
+import de.sdomma.tictactoe.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        const val PLAYER_ONE_COUNTER_KEY = "playerOneCounterKey"
+        const val PLAYER_TWO_COUNTER_KEY = "playerTwoCounterKey"
+        const val DRAW_COUNTER_KEY = "drawCounterKey"
+        
+    }
+
+    private lateinit var binding: ActivityMainBinding
 
     private var myGame = Game()
     private var inputFields: MutableList<ImageView>? = null
 
-    private lateinit var currentPlayerTV: TextView
-    private lateinit var winningMessageTV: TextView
-    private lateinit var btnReset: Button
-
-    private lateinit var counterOneTV: TextView
     private var counterOne: Int = 0
         set(value) {
             field = value
-            counterOneTV.text = value.toString()
+            binding.counterOne.text = value.toString()
         }
 
-    private lateinit var counterTwoTV: TextView
     private var counterTwo: Int = 0
         set(value) {
             field = value
-            counterTwoTV.text = value.toString()
+            binding.counterTwo.text = value.toString()
         }
 
-    private lateinit var counterDrawTV: TextView
     private var counterDraw: Int = 0
         set(value) {
             field = value
-            counterDrawTV.text = value.toString()
+            binding.counterDraw.text = value.toString()
         }
+
+    private fun getIconForPlayer(player: Player): Int = when (player) {
+        Player.ONE -> R.drawable.ic_player_one
+        Player.TWO -> R.drawable.ic_player_two
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        counterOneTV = findViewById(R.id.counter_one)
-        counterTwoTV = findViewById(R.id.counter_two)
-        counterDrawTV = findViewById(R.id.counter_draw)
-
-        currentPlayerTV = findViewById(R.id.current_player_tv)
-        winningMessageTV = findViewById(R.id.winning_message_tv)
-        btnReset = findViewById(R.id.btn_reset)
-
-        val input0: ImageView = findViewById(R.id.input_0)
-        val input1: ImageView = findViewById(R.id.input_1)
-        val input2: ImageView = findViewById(R.id.input_2)
-        val input3: ImageView = findViewById(R.id.input_3)
-        val input4: ImageView = findViewById(R.id.input_4)
-        val input5: ImageView = findViewById(R.id.input_5)
-        val input6: ImageView = findViewById(R.id.input_6)
-        val input7: ImageView = findViewById(R.id.input_7)
-        val input8: ImageView = findViewById(R.id.input_8)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         inputFields = mutableListOf(
-            input0, input1, input2, input3, input4, input5, input6, input7, input8
+            binding.input0,
+            binding.input1,
+            binding.input2,
+            binding.input3,
+            binding.input4,
+            binding.input5,
+            binding.input6,
+            binding.input7,
+            binding.input8
         ).apply {
             this.forEachIndexed { index, iv ->
                 iv.setOnClickListener {
                     //  (2 / 3 = 0) (2 % 3 = 2)
-                    dothething(iv, index / 3, index % 3)
+                    onUserInput(iv, index / 3, index % 3)
                 }
             }
         }
 
-        currentPlayerTV.text = "Your turn Player ${myGame.currentPlayer}"
-
-        btnReset.setOnClickListener {
+        binding.btnReset.setOnClickListener {
             resetGame()
         }
 
-        /*input0.setOnClickListener {
-            dothething(winningMessageTV, currentPlayerTV, input0, 0, 0)
-        }
+        setMessage(myGame.gameStatus)
+    }
 
-        input1.setOnClickListener {
-            dothething(winningMessageTV, currentPlayerTV, input1, 0, 1)
-        }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
 
-        input2.setOnClickListener {
-            dothething(winningMessageTV, currentPlayerTV, input2, 0, 2)
-        }
+        outState.putInt(PLAYER_ONE_COUNTER_KEY, counterOne)
+        outState.putInt(PLAYER_TWO_COUNTER_KEY, counterTwo)
+        outState.putInt(DRAW_COUNTER_KEY, counterDraw)
 
         input3.setOnClickListener {
             dothething(winningMessageTV, currentPlayerTV, input3, 1, 0)
         }
 
-        input4.setOnClickListener {
-            dothething(winningMessageTV, currentPlayerTV, input4, 1, 1)
-        }
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
 
-        input5.setOnClickListener {
-            dothething(winningMessageTV, currentPlayerTV, input5, 1, 2)
-        }
+        counterOne = savedInstanceState.getInt(PLAYER_ONE_COUNTER_KEY)
+        counterTwo = savedInstanceState.getInt(PLAYER_TWO_COUNTER_KEY)
+        counterDraw = savedInstanceState.getInt(DRAW_COUNTER_KEY)
 
         input6.setOnClickListener {
             dothething(winningMessageTV, currentPlayerTV, input6, 2, 0)
@@ -115,64 +104,58 @@ class MainActivity : AppCompatActivity() {
         }*/
     }
 
-    private fun dothething(
-        inputField: ImageView,
-        x: Int,
-        y: Int
-    ) {
-        // Game is running AND valid input (Field is not already taken)
-//            if (myGame.gameStatus != GameStatus.RUNNING || !myGame.isValidInput(0, 0)) return@setOnClickListener
-        if (myGame.gameStatus == GameStatus.RUNNING && myGame.isValidInput(x, y)) {
+    private fun onUserInput(inputField: ImageView, x: Int, y: Int) {
+        if (myGame.gameStatus != GameStatus.RUNNING || !myGame.isValidInput(x, y)) return
 
-            // Make move on the gameboard
-            myGame.makeMove(x, y)
+        // Make move on the gameboard
+        myGame.makeMove(x, y)
 
-            // Show move on the UI
-            inputField.setImageDrawable(
-                ResourcesCompat.getDrawable(
-                    resources,
-                    if (myGame.currentPlayer == Player.ONE) {
-                        // Set icon for player one
-                        R.drawable.ic_player_one
-                    } else {
-                        // Set icon for player two
-                        R.drawable.ic_player_two
-                    }, null
-                )
-            )
+        // Show move on the UI
+        setPlayerIcon(inputField, getIconForPlayer(myGame.currentPlayer))
 
-            // Checkboard for win or Draw
-            myGame.checkBoard(myGame.board)
+        // Check board for win or Draw
+        val gameStatus = myGame.checkBoard(myGame.board)
 
-            if (myGame.gameStatus == GameStatus.WON) {
-                winningMessageTV.apply {
-                    text = "You Won Player ${myGame.currentPlayer}"
-                    visibility = View.VISIBLE
-                }
+        updateCounters(gameStatus)
+        setResetButtonVisibility(gameStatus)
+        myGame.switchPlayer(gameStatus)
 
+        // Show message according to the gameStatus
+        setMessage(gameStatus)
+    }
+
+    private fun updateCounters(gameStatus: GameStatus) {
+        when (gameStatus) {
+            GameStatus.WON -> {
                 if (myGame.currentPlayer == Player.ONE) {
                     counterOne++
                 } else {
                     counterTwo++
                 }
-                // Solution 1
-//                btnReset.visibility = View.VISIBLE
             }
+            GameStatus.DRAW -> counterDraw++
+            else -> Unit
+        }
+    }
 
-            if (myGame.gameStatus == GameStatus.DRAW) {
-                winningMessageTV.apply {
-                    text = "Draw"
-                    visibility = View.VISIBLE
-                }
+    private fun setResetButtonVisibility(gameStatus: GameStatus) {
+        binding.btnReset.visibility =
+            if (gameStatus != GameStatus.RUNNING) View.VISIBLE else View.INVISIBLE
+    }
 
-                counterDraw++
-//                btnReset.visibility = View.VISIBLE
-            }
+    private fun setMessage(gameStatus: GameStatus) {
+        when (gameStatus) {
+            GameStatus.WON -> getString(R.string.msg_won_player, myGame.currentPlayer)
+            GameStatus.DRAW -> getString(R.string.msg_draw)
+            GameStatus.RUNNING -> getString(R.string.msg_turn_player, myGame.currentPlayer)
+        }.let {
+            binding.message.text = it
+        }
+    }
 
-            // Solution 2
-//            if (myGame.gameStatus == GameStatus.WON || myGame.gameStatus == GameStatus.DRAW) {
-//                btnReset.visibility = View.VISIBLE
-//            }
+    private fun setPlayerIcon(inputField: ImageView, icon: Int) {
+        inputField.setImageResource(icon)
+    }
 
             // Solution 3
 //            if (myGame.gameStatus != GameStatus.RUNNING) {
@@ -192,15 +175,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetGame() {
-        inputFields?.forEach {
-            it.setImageDrawable(null)
-        }
-
         myGame = Game()
+        inputFields?.forEach { it.setImageDrawable(null) }
 
-        btnReset.visibility = View.INVISIBLE
-        winningMessageTV.visibility = View.INVISIBLE
-
-        currentPlayerTV.text = "Your turn Player ${myGame.currentPlayer}"
+        setResetButtonVisibility(myGame.gameStatus)
+        setMessage(myGame.gameStatus)
     }
 }

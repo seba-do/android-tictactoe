@@ -8,100 +8,33 @@
     android:paddingVertical="20dp"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/stats"
+    <Button
+        android:id="@+id/btn_reset"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:text="One" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:text="Draw"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:text="Two" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/counter_one"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:text="0" />
-
-            <TextView
-                android:id="@+id/counter_draw"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:text="0"/>
-
-            <TextView
-                android:id="@+id/counter_two"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:text="0" />
-        </LinearLayout>
-
-    </LinearLayout>
+        android:layout_height="60dp"
+        android:background="@drawable/shape_btn"
+        android:text="Reset Game"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
 
     <LinearLayout
         android:id="@+id/game_board"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_board"
+        app:layout_constraintVertical_bias="0.4"
         android:divider="@drawable/divider"
         android:orientation="vertical"
         android:showDividers="middle"
-        android:background="@drawable/bg_board"
-
-        app:layout_constraintTop_toBottomOf="@id/stats"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -173,43 +106,95 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/current_player_tv"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/stats"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/game_board"
-        app:layout_constraintBottom_toTopOf="@id/winning_message_tv"
-        tools:text="Your turn player One" />
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="One"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Draw"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Two"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/counter_one"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/counter_draw"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/counter_two"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/winning_message_tv"
+        android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="18sp"
-        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/btn_reset"
-        app:layout_constraintTop_toBottomOf="@id/current_player_tv"
-        tools:text="You won Player One"
-        tools:visibility="visible" />
-
-    <Button
-        android:id="@+id/btn_reset"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Reset Game"
-        android:textSize="18sp"
-        android:background="@drawable/shape_btn"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/winning_message_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@id/game_board"
+        tools:text="Message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
