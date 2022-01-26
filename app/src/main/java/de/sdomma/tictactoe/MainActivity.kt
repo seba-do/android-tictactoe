@@ -89,7 +89,9 @@ class MainActivity : AppCompatActivity() {
         counterTwo = savedInstanceState.getInt(PLAYER_TWO_COUNTER_KEY)
         counterDraw = savedInstanceState.getInt(DRAW_COUNTER_KEY)
 
-        val board = savedInstanceState.getSerializable(GAME_BOARD_KEY) as Array<Array<Player?>>
+        val board = (savedInstanceState.getSerializable(GAME_BOARD_KEY) as? Array<*>)
+            ?.asArrayOfType()
+            ?: myGame.getEmptyBoard()
         val currentPlayer = savedInstanceState.getSerializable(CURRENT_PLAYER_KEY) as Player
         val gameStatus = savedInstanceState.getSerializable(GAME_STATUS_KEY) as GameStatus
         myGame = Game(board, currentPlayer, gameStatus)
@@ -172,4 +174,10 @@ class MainActivity : AppCompatActivity() {
         setResetButtonVisibility(myGame.gameStatus)
         setMessage(myGame.gameStatus)
     }
+
+    private inline fun <reified T> Array<*>.asArrayOfType(): Array<T>? =
+        if (all { it is T })
+            @Suppress("UNCHECKED_CAST")
+            this as Array<T> else
+            null
 }
