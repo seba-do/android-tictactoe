@@ -1,7 +1,18 @@
 package de.sdomma.tictactoe
 
-class Game {
-    val board: Array<Array<Player?>> = arrayOf(
+class Game() {
+
+    constructor(
+        board: Array<Array<Player?>>,
+        currentPlayer: Player,
+        gameStatus: GameStatus
+    ) : this() {
+        this.board = board
+        this.currentPlayer = currentPlayer
+        this.gameStatus = gameStatus
+    }
+
+    var board: Array<Array<Player?>> = arrayOf(
         arrayOf(null, null, null),
         arrayOf(null, null, null),
         arrayOf(null, null, null)

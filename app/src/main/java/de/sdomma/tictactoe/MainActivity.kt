@@ -11,7 +11,9 @@ class MainActivity : AppCompatActivity() {
         const val PLAYER_ONE_COUNTER_KEY = "playerOneCounterKey"
         const val PLAYER_TWO_COUNTER_KEY = "playerTwoCounterKey"
         const val DRAW_COUNTER_KEY = "drawCounterKey"
-        
+        const val GAME_BOARD_KEY = "gameBoardKey"
+        const val GAME_STATUS_KEY = "gameStatusKey"
+        const val CURRENT_PLAYER_KEY = "currentPlayer"
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -80,9 +82,10 @@ class MainActivity : AppCompatActivity() {
         outState.putInt(PLAYER_TWO_COUNTER_KEY, counterTwo)
         outState.putInt(DRAW_COUNTER_KEY, counterDraw)
 
-        input3.setOnClickListener {
-            dothething(winningMessageTV, currentPlayerTV, input3, 1, 0)
-        }
+        outState.putSerializable(GAME_BOARD_KEY, myGame.board)
+        outState.putSerializable(CURRENT_PLAYER_KEY, myGame.currentPlayer)
+        outState.putSerializable(GAME_STATUS_KEY, myGame.gameStatus)
+    }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
@@ -91,17 +94,12 @@ class MainActivity : AppCompatActivity() {
         counterTwo = savedInstanceState.getInt(PLAYER_TWO_COUNTER_KEY)
         counterDraw = savedInstanceState.getInt(DRAW_COUNTER_KEY)
 
-        input6.setOnClickListener {
-            dothething(winningMessageTV, currentPlayerTV, input6, 2, 0)
-        }
+        val board = savedInstanceState.getSerializable(GAME_BOARD_KEY) as Array<Array<Player?>>
+        val currentPlayer = savedInstanceState.getSerializable(CURRENT_PLAYER_KEY) as Player
+        val gameStatus = savedInstanceState.getSerializable(GAME_STATUS_KEY) as GameStatus
+        myGame = Game(board, currentPlayer, gameStatus)
 
-        input7.setOnClickListener {
-            dothething(winningMessageTV, currentPlayerTV, input7, 2, 1)
-        }
-
-        input8.setOnClickListener {
-            dothething(winningMessageTV, currentPlayerTV, input8, 2, 2)
-        }*/
+        resetAllPlayerIcons()
     }
 
     private fun onUserInput(inputField: ImageView, x: Int, y: Int) {
@@ -157,20 +155,13 @@ class MainActivity : AppCompatActivity() {
         inputField.setImageResource(icon)
     }
 
-            // Solution 3
-//            if (myGame.gameStatus != GameStatus.RUNNING) {
-//                btnReset.visibility = View.VISIBLE
-//            }
-
-            // Solution 4 - 5
-            btnReset.visibility = if (myGame.gameStatus != GameStatus.RUNNING) View.VISIBLE else View.INVISIBLE
-
-            // Solution 5 - 3
-//            btnReset.isVisible = myGame.gameStatus != GameStatus.RUNNING
-
-            // Switch Player
-            myGame.switchPlayer()
-            currentPlayerTV.text = "Your turn Player ${myGame.currentPlayer}"
+    private fun resetAllPlayerIcons() {
+        myGame.board.flatten().forEachIndexed { index, player ->
+            if (player != null) {
+                inputFields?.getOrNull(index)?.let {
+                    setPlayerIcon(it, getIconForPlayer(player))
+                }
+            }
         }
     }
 
